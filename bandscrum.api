@@ -52,9 +52,9 @@ If successful, returns Track
 
 --------------
 
-[DELETE] /tracks/revoke
+[POST] /tracks/revoke
 
-# Remove the track - only nominator can use this method. Track will be permanently deleted from the table. If track is in state PENDING, 3 votes will be returned to the nominator.
+# Remove the track - only nominator can use this method. Track will change to state REMOVED. If track is in state PENDING, 3 votes will be returned to the nominator.
 
 Params:
 * trackId [int] (required)
@@ -98,7 +98,7 @@ If successful, returns Track
 
 [POST] /tracks/skip
 
-# Skip the generated song. Track will change from state GENERATED to ACTIVE.
+# Skip the generated song. Track will change from state GENERATED to REMOVED.
 
 Params:
 * trackId [int] (required)
