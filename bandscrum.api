@@ -1,0 +1,106 @@
+[GET] /tracks
+
+# List all tracks metadata.
+
+Params:
+* listPending [boolean] (default: false)
+* listActive [boolean] (default: true)
+* listGenerated [boolean] (default: true)
+* listChosen [boolean] (default: true)
+* listRemoved [boolean] (default: false)
+
+If successful, returns [Track]
+
+--------------
+
+[GET] /tracks/{trackId}
+
+# Obtain track metadata given trackId.
+
+If successful, returns Track
+
+--------------
+
+[GET] /users/{userId}
+
+# Get user info, including remaining vote count.
+
+If successful, return User
+
+--------------
+
+[POST] /tracks/nominate
+
+# Nominate a track with 3 votes. A new track row will be created with state PENDING.
+
+Params:
+* trackName [string] (required)
+* trackArtist [string] (required)
+
+If successful, returns Track
+
+--------------
+
+[POST] /tracks/approve
+
+# Approve the track to enter the active pool for voting - only band lead can use this method. Track state will change from PENDING to ACTIVE.
+
+Params:
+* trackId [int] (required)
+
+If successful, returns Track
+
+--------------
+
+[DELETE] /tracks/revoke
+
+# Remove the track - only nominator can use this method. Track will be permanently deleted from the table. If track is in state PENDING, 3 votes will be returned to the nominator.
+
+Params:
+* trackId [int] (required)
+
+--------------
+
+[POST] /tracks/vote
+
+# Add 1 vote to the track.
+
+Params:
+* trackId [int] (required)
+
+If successful, returns Track
+
+--------------
+
+[POST] /tracks/generate
+
+# Choose one from all ACTIVE tracks proportional to their vote counts. The generated track will change from state ACTIVE to GENERATED; state will last for 5 minutes for further action. If nothing happens, it will be reverted to ACTIVE.
+
+Params:
+* trackId [int] (default: -1)
+
+If successful, returns Track
+
+If called with trackId, force generate that track.
+
+--------------
+
+[POST] /tracks/choose
+
+# Officially choose the generated song. Track will change from state GENERATED to CHOSEN.
+
+Params:
+* trackId [int] (required)
+
+If successful, returns Track
+
+--------------
+
+[POST] /tracks/skip
+
+# Skip the generated song. Track will change from state GENERATED to ACTIVE.
+
+Params:
+* trackId [int] (required)
+
+If successful, returns Track
