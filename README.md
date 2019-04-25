@@ -1,3 +1,3 @@
 # bandscrum
 
-python manage.py runserver 0:80
+python manage.py runserver 0:8081
