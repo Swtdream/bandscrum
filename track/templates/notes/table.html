@@ -1,0 +1,114 @@
+{# templates/display.html #}
+{% load static %}
+<!doctype html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css"/>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <style>
+        .footer{
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+        }
+        </style>
+    </head>
+    <body style="background-color:LightCyan">
+        <br>
+        <h1 align="center"> Claim Note Database </h1>
+
+<div class="row">
+<div class="col col-md-10 offset-md-1">
+<div class="card">
+<div class="card-body">
+<h3> Monitor </h3>
+<br>
+<!--<table id="show" class="table table-striped" style="width:100%">-->
+<table id="show" class="display" style="width:100%">
+  <thead>
+    <tr>
+      <th scope="col">No</th>
+      <th scope="col">Title</th>
+      <th scope="col">Created</th>
+      <th scope="col">Updated</th>
+      <th scope="col">POC</th>
+      <th scope="col">CVSS</th>
+      <th scope="col">Severity</th>
+      <th scope="col">Protocol</th>
+      <th scope="col">Vul_ID</th>
+      <th scope="col">Sig_ID</th>
+      <th scope="col">Vendor</th>
+      <th scope="col">VSENSE</th>
+      <th scope="col">JIRA</th>
+      <th scope="col">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+      {% for row in lastest_record %}
+    <tr>
+      <th scope="row"> {{ forloop.counter }} </th>
+        <td style ="word-break:break-all;"> {{ row.CLAIMNO }}</td>
+        <td style ="word-break:break-all;"> {{ row.created_on }}</td>
+        <td style ="word-break:break-all;"> {{ row.updated_on }}</td>
+        <td style ="word-break:break-all;"> {{ row.with_poc }}</td>
+        <td style ="word-break:break-all;"> {{ row.cvss_score }}</td>
+        <td style ="word-break:break-all;"> {{ row.cvss_severity }}</td>
+        <td style ="word-break:break-all;"> {{ row.protocol }}</td>
+        <td style ="word-break:break-all;"> 
+            {% if row.vulnerability_id == None %}
+                {{ row.vulnerability_id }}
+            {% else %}
+                <a href="https://rhino.paloaltonetworks.local/cgi-bin/pan_tdb.pl?action=show_id&db=tdb&tid={{ row.vulnerability_id }}">{{ row.vulnerability_id }}</a>
+            {% endif %}
+        </td>
+        <td style ="word-break:break-all;">
+            {% if row.signature_id == None %}
+                {{ row.signature_id }}
+            {% else %}
+                <a href="https://rhino.paloaltonetworks.local/cgi-bin/pan_tdb.pl?db=threat&action=show_id&tid={{ row.signature_id }}">{{ row.signature_id }}</a>
+            {% endif %}
+        </td>
+        <td style ="word-break:break-all;"> {{ row.vendor }}</td>
+        <td style ="word-break:break-all;"> <a href="{{ row.vsense_link }}">link</a></td>
+        <td> 
+            {% if row.jira_id == None %}
+                {{ row.jira_id }}
+            {% else %}
+                <a href="{{ row.jira_link }}">{{ row.jira_id }}</a>
+            {% endif %}
+        </td>
+        <td style ="word-break:break-all;"> {{ row.jira_status }}</td>
+    </tr>
+      {% endfor %}
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <!-- datatable -->
+        <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.js"></script>
+        <!-- bootstrap -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+    $(document).ready( function () {
+        $('#show').DataTable();
+
+        $('input.global_filter').on( 'keyup click', function () {
+            filterGlobal();
+        } );
+
+        $('input.column_filter').on( 'keyup click', function () {
+            filterColumn( $(this).parents('tr').attr('data-column') );
+        } );
+    } );
+    </script>
+    </body>
+    <div class="footer">
+    Content Threat Detection 2019
+    </div>
+</html>
+

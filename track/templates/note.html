@@ -1,0 +1,69 @@
+{# templates/display.html #}
+{% load static %}
+{% load render_table from django_tables2 %}
+<!doctype html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <style>
+        .footer{
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+        }
+        p.thick {
+            font-weight: bold;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        p.normal {
+            font-weight: bold;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        </style>
+    </head>
+    <body style="background-color:#5AB786" style='font-family="Arial, Helvetica, sans-serif"'>
+        <br>
+        <a href="/"> <p class="thick" align="center" font="Arial" style="font-size:240%; color:black"> Claim Note Review System </p> </a>
+
+<div class="row">
+<div class="col col-md-10 offset-md-1">
+<div class="card">
+<div class="card-body">
+            <div class="card-body" style="background:transparent">
+				<p class="thick" style="display: inline">ClaimNumber:</p> {{claimNumber}}
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="/bill/{{claimNumber}}"> <p class="thick" style="display: inline">Bill data for claim:</p> {{claimNumber}} </a>
+        </div>
+		<p class="thick" style="display: inline">RTW:</p> Return to work;
+		<p class="thick" style="display: inline">PTP:</p> Change of PTP; 
+		<p class="thick" style="display: inline">DNY:</p> Denial of Benefits;
+		<p class="thick" style="display: inline">SUBRO:</p> Subrogation 
+<!--<table id="show" class="table table-striped" style="width:100%">-->
+	{% render_table notes %}
+</div>
+</div>
+</div>
+</div>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <!-- datatable -->
+        <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.js"></script>
+        <!-- bootstrap -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+    $(document).ready( function () {
+		$("#indicator").val("{{indicator}}");
+		$("#customer").val("{{customer}}");
+		$("#note_text").val("{{note_text}}");
+    } );
+    </script>
+    </body>
+    <div class="footer">
+    Clara Analytics Data Science 2019
+    </div>
+</html>
+

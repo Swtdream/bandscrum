@@ -1,0 +1,124 @@
+{# templates/display.html #}
+{% load static %}
+<!doctype html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css"/>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <style>
+        .footer{
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+        }
+        p.thick {
+            font-weight: bold;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        p.normal {
+            font-weight: bold;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        </style>
+    </head>
+    <body style="background-color:#5AB786">
+        <br>
+        <p class="thick" align="center" font="Arial" style="font-size:240%;"> Claim Note Database </p>
+
+<div class="row">
+<div class="col col-md-10 offset-md-1">
+<div class="card">
+<div class="card-body">
+            <div class="card-body" style="background:transparent">
+                <form id="searchform" action="{{ 'search' }}" method="get">
+                    <p class="thick" style="display: inline">Risk Indicator: </p>
+                    <select name="indicator" id="indicator">
+						<option value="">SHOW ALL</option>
+                        <option value="none">NONE</option>
+						<option value="any">ANY</option>
+                        <option value="RTW">RTW</option>
+                        <option value="PTP">PTP</option>
+                        <option value="DNY">DNY</option>
+                        <option value="SUB">SUB</option>
+                    </select>
+					&nbsp;&nbsp;&nbsp;&nbsp;
+                    <p class="thick" style="display: inline">Customer: </p>
+                    <select name="customer" id="customer">
+						<option value="">SHOW ALL</option>
+                        <option value="MEMIC">MEMIC</option>
+                        <option value="TRISTAR">TRISTAR</option>
+                    </select>
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<p class="thick" style="display: inline"> Text: <input type="text" name="note_text" id="note_text"> </p>
+					&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="submit" value="Filter">
+                </form>
+        </div>
+		<p class="thick" style="display: inline">RTW:</p> Return to work;
+		<p class="thick" style="display: inline">PTP:</p> Change of PTP; 
+		<p class="thick" style="display: inline">DNY:</p> Denial of Benefits;
+		<p class="thick" style="display: inline">SUB:</p> Subrogation 
+<!--<table id="show" class="table table-striped" style="width:100%">-->
+<table id="show" class="display" style="width:100%">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">CLAIM_ID</th>
+      <th scope="col">CLAIMANT</th>
+      <th scope="col">INDICATOR</th>
+      <th scope="col">VERIFIED</th>
+      <th scope="col">COMMENTS</th>
+      <th scope="col">TEXT</th>
+    </tr>
+  </thead>
+  <tbody>
+      {% for row in lastest_record %}
+    <tr>
+      <th scope="row"> <a href="/{{ row.id }}">{{ row.id }} </th>
+        <td style ="word-break:break-all;"> {{ row.CLAIM_ID }}</td>
+        <td style ="word-break:break-all;"> {{ row.CLAIMANT }}</td>
+        <td style ="word-break:break-all;"> {{ row.INDICATOR }}</td>
+        <td style ="word-break:break-all;"> {{ row.VERIFIED }}</td>
+        <td style ="word-break:break-all;"> {{ row.COMMENTS|truncatewords:10 }}</td>
+        <td style ="word-break:break-all;"> {{ row.TEXT|truncatewords:10 }}</td>
+    </tr>
+      {% endfor %}
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <!-- datatable -->
+        <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.js"></script>
+        <!-- bootstrap -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+    $(document).ready( function () {
+        $('#show').DataTable({
+		serverSide: true,
+			searching: false,
+		});
+
+        $('input.global_filter').on( 'keyup click', function () {
+            filterGlobal();
+        } );
+
+        $('input.column_filter').on( 'keyup click', function () {
+            filterColumn( $(this).parents('tr').attr('data-column') );
+        } );
+		$("#indicator").val("{{indicator}}");
+		$("#customer").val("{{customer}}");
+		$("#note_text").val("{{note_text}}");
+    } );
+    </script>
+    </body>
+    <div class="footer">
+    Clara Analytics Data Science 2019
+    </div>
+</html>
+

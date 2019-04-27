@@ -23,6 +23,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'import_export',
+    "django_tables2",
+    'bootstrap3',
+    'django_filters',
 
     # Vendor apps
     'bootstrap4',

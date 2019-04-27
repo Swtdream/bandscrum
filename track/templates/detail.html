@@ -1,0 +1,129 @@
+{% load static %}
+{% load render_table from django_tables2 %}
+<!doctype html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css"/>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <style>
+        .footer{
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+        }
+        p.thick {
+            font-weight: bold;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        p.normal {
+            font-weight: bold;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        </style>
+    </head>
+    <body style="background-color:#5AB786">
+        <br>
+        <a href="/"> <p class="thick" align="center" font="Arial" style="font-size:240%; color:black"> Claim Note Review System </p> </a>
+
+<div class="row">
+<div class="col col-md-10 offset-md-1">
+<div class="card">
+<div class="card-body">
+            <div class="card-body" style="background:transparent">
+               <a href="/claim/{{claimNumber}}"> <p class="thick" style="display: inline">ClaimNumber:</p> {{claimNumber}} </a>
+        </div>
+		<p class="thick" style="display: inline">RTW:</p> Return to work;
+		<p class="thick" style="display: inline">PTP:</p> Change of PTP; 
+		<p class="thick" style="display: inline">DNY:</p> Denial of Benefits;
+		<p class="thick" style="display: inline">SUB:</p> Subrogation 
+{% render_table feedback %}
+
+<h4>Predicted Indicators: {{record.indicators}}</h4>
+
+<table id="show_text" class="display" style="width:100%">
+  <thead>
+    <tr>
+      <th scope="col">TEXT</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+        <td style ="word-break:break-all;"> {{ record.claimNoteText }}</td>
+    </tr>
+  </tbody>
+</table>  
+  <br/><br />
+
+
+
+
+
+<p>
+<h4>Create a Feedback: </h4>
+<form action="" method="POST">
+{% csrf_token %}
+Reviewer: <br/>
+<textarea cols="10" rows="1" name="reviewer">
+</textarea><br/>  
+Validation: indicators in your opinion<br>
+  <input type="checkbox" name="RTW" value="RTW" id="RTW"> RTW&nbsp;&nbsp;&nbsp;&nbsp;
+  <input type="checkbox" name="PTP" value="PTP" id="PTP"> PTP&nbsp;&nbsp;&nbsp;&nbsp;
+  <input type="checkbox" name="DNY" value="DNY" id="DNY"> DNY&nbsp;&nbsp;&nbsp;&nbsp;
+   <input type="checkbox" name="SUB" value="SUB" id="SUB"> SUBRO&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Probability (%): probability of your validation<br/>
+<textarea cols="10" rows="1" name="probability">
+</textarea>%<br/>  
+Saving ($): potential saving if not have this indicator<br/>
+$<textarea cols="10" rows="1" name="saving">
+</textarea><br/> 
+Comments: <br/>
+<textarea cols="35" rows="8" name="comments">
+</textarea><br/>
+<input type="submit" value="Submit"/>
+<var name="id" value="{{record.id}}"/>
+</form>
+</div>
+</div>
+</div>
+</body>
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <!-- datatable -->
+        <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.js"></script>
+        <!-- bootstrap -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+    $(document).ready( function () {
+		$('#show').DataTable({
+			searching: false,
+			paging:         false,
+			info: false
+		} );
+		
+        $('#show_text').DataTable({
+        scrollY:        '50vh',
+        scrollCollapse: true,
+        paging:         false,
+		searching: false,
+		info: false,
+    } );
+	
+		var inds = ["RTW", "PTP", "DNY", "SUB"];
+		var this_ind = "{{record.indicators}}";
+		for (i=0; i<inds.length; i++){
+			if (this_ind.includes(inds[i])){
+			document.getElementById(inds[i]).checked = true;
+			};
+		};
+
+
+    } );
+    </script>
+    </body>
+    <div class="footer">
+    Clara Analytics Data Science 2019
+    </div>
+</html>
