@@ -34,6 +34,8 @@ INSTALLED_APPS = [
     # Application apps
     'main',
     'accounts',
+    'track',
+    'health',
 ]
 
 MIDDLEWARE = [
